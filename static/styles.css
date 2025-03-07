@@ -1,6 +1,6 @@
 :root {
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
   --primary-light: #e0e7ff;
   --secondary: #10b981;
   --secondary-hover: #059669;
@@ -8,7 +8,7 @@
   --warning: #f59e0b;
   --success: #10b981;
   --dark: #1f2937;
-  --light: #ffffff;
+  --light: #f3f4f6;
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
@@ -45,12 +45,29 @@
   --gray-900: #f9fafb;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: var(--font-sans);
-  background-color: var(--light);
-  color: var(--gray-900);
+  background-color: var(--gray-100);
+  color: var(--gray-900);  /* Changed from var(--gray-800) to darker gray */
   line-height: 1.5;
   transition: background-color 0.3s, color 0.3s;
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+  background-image: radial-gradient(circle at 25px 25px, var(--gray-200) 2%, transparent 0%),
+    radial-gradient(circle at 75px 75px, var(--gray-200) 2%, transparent 0%);
+  background-size: 100px 100px;
+}
+
+.dark body {
+  background: linear-gradient(135deg, var(--gray-900) 0%, var(--gray-800) 100%);
+  background-image: radial-gradient(circle at 25px 25px, var(--gray-700) 2%, transparent 0%),
+    radial-gradient(circle at 75px 75px, var(--gray-700) 2%, transparent 0%);
+  color: var(--gray-100);  /* Explicitly set dark mode text color */
 }
 
 .container {
@@ -68,34 +85,55 @@ header {
   border-radius: var(--radius);
   box-shadow: var(--shadow-md);
   transition: background-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .dark header {
   background-color: var(--gray-800);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-600);
+  transition: color 0.2s, transform 0.2s;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--primary);
+  transform: scale(1.1);
+  transform: rotate(180deg);
 }
 
 h1 {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: var(--gray-900);
+  color: var(--gray-900);  /* Explicitly darker for light mode */
   transition: color 0.3s;
 }
 
 .dark h1 {
-  color: var(--gray-100);
+  color: var(--gray-100);  /* Explicitly set dark mode color */
 }
 
 header p {
   font-size: 1.1rem;
-  color: var(--gray-700);
+  color: var(--gray-700);  /* Darkened from var(--gray-600) for better visibility */
   max-width: 600px;
   margin: 0 auto;
   transition: color 0.3s;
 }
 
 .dark header p {
-  color: var(--gray-300);
+  color: var(--gray-400);  /* Explicitly set dark mode color */
 }
 
 .app-logo {
@@ -110,34 +148,53 @@ header p {
   color: var(--primary);
   font-size: 2rem;
   transition: transform 0.3s ease, background-color 0.3s, color 0.3s;
-  box-shadow: 0 0 15px rgba(79, 70, 229, 0.3);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+  transition: box-shadow 0.3s ease;
 }
 
 .app-logo:hover {
   transform: rotate(15deg) scale(1.1);
-  box-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .card {
-  background-color: var(--light);
+  background-color: white;
   border-radius: var(--radius);
   box-shadow: var(--shadow-md);
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .dark .card {
   background-color: var(--gray-800);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
 }
 
 .card:hover {
-  transform: translateY(-5px) scale(1.02);
+  transform: translateY(-5px);
   box-shadow: var(--shadow-lg);
+  transform: translateY(-5px) scale(1.02);
 }
 
 .card-header {
   padding: 1.5rem;
   border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background-color: var(--gray-50);
   transition: background-color 0.3s;
 }
@@ -150,25 +207,37 @@ header p {
 .card-header h2 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--gray-900);
+  color: var(--gray-900);  /* Explicitly darker for light mode */
   margin: 0;
   transition: color 0.3s;
 }
 
 .dark .card-header h2 {
-  color: var(--gray-100);
+  color: var(--gray-100);  /* Explicitly set dark mode color */
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.form-container {
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: var(--gray-800);
+  color: var(--gray-900);  /* Changed from var(--gray-700) for better visibility */
   transition: color 0.3s;
 }
 
 .dark .form-group label {
-  color: var(--gray-200);
+  color: var(--gray-300);  /* Explicitly set for dark mode */
 }
 
 .form-group input[type="text"],
@@ -178,8 +247,8 @@ header p {
   border: 1px solid var(--gray-300);
   border-radius: var(--radius);
   font-size: 1rem;
-  background-color: var(--light);
-  color: var(--gray-900);
+  background-color: var(--gray-50);
+  color: var(--gray-900);  /* Darkened for better visibility */
   transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s, color 0.3s;
 }
 
@@ -194,7 +263,47 @@ header p {
 .form-group select:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.form-group input[type="text"]:hover,
+.form-group select:hover {
+  border-color: var(--primary);
+}
+
+.form-group.checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.form-group.checkbox input {
+  margin-right: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--primary);
+}
+
+.form-group.checkbox label {
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+  border: none;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+button:active {
+  transform: scale(0.98);
 }
 
 #generateBtn {
@@ -202,13 +311,82 @@ header p {
   color: white;
   width: 100%;
   margin-top: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2), 0 2px 4px -1px rgba(79, 70, 229, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2), 0 2px 4px -1px rgba(99, 102, 241, 0.1);
   animation: pulse 2s infinite;
 }
 
 #generateBtn:hover {
   background-color: var(--primary-hover);
-  box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.3), 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+  box-shadow: 0 6px 8px -1px rgba(99, 102, 241, 0.3), 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+.results-container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.results-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--gray-900);  /* Explicitly darker for light mode */
+  transition: color 0.3s;
+}
+
+.dark .results-container h2 {
+  color: var(--gray-100);  /* Explicitly set dark mode color */
+}
+
+#loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--gray-200);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+.header-logo {
+  height: 50px; /* Adjust size as needed */
+  width: auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 #results {
@@ -217,12 +395,99 @@ header p {
   border-radius: var(--radius);
   margin-bottom: 1rem;
   transition: background-color 0.3s;
-  color: var(--gray-900);
+  color: var(--gray-900);  /* Added explicit color for light mode */
 }
 
 .dark #results {
   background-color: var(--gray-700);
-  color: var(--gray-100);
+  color: var(--gray-100);  /* Explicitly set dark mode color */
+}
+
+#results h3 {
+  color: var(--primary);
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1.25rem;
+  transition: color 0.3s;
+}
+
+#results h3:first-child {
+  margin-top: 0;
+}
+
+.list-item {
+  margin-bottom: 0.75rem;
+  display: flex;
+  color: var(--gray-900);  /* Added explicit color for light mode */
+}
+
+.dark .list-item {
+  color: var(--gray-200);  /* Explicitly set dark mode color */
+}
+
+.list-number {
+  color: var(--primary);
+  font-weight: 600;
+  margin-right: 0.5rem;
+  transition: color 0.3s;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+#copyBtn,
+#printBtn {
+  flex: 1;
+  background-color: var(--gray-200);
+  color: var(--gray-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.dark #copyBtn,
+.dark #printBtn {
+  background-color: var(--gray-700);
+  color: var(--gray-200);
+}
+
+#copyBtn:hover,
+#printBtn:hover {
+  background-color: var(--gray-300);
+  transform: translateY(-2px);
+}
+
+.dark #copyBtn:hover,
+.dark #printBtn:hover {
+  background-color: var(--gray-600);
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.icon {
+  font-size: 1.25rem;
+}
+
+.error {
+  color: var(--danger);
+  padding: 1rem;
+  background-color: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+
+.pet-type-icons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 .pet-icon {
@@ -230,26 +495,49 @@ header p {
   background-color: var(--gray-100);
   border-radius: var(--radius);
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s, transform 0.2s, border-color 0.2s;
+  transition: background-color 0.2s, color 0.2s, transform 0.2s;
   font-size: 0.9rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   border: 2px solid transparent;
-  color: var(--gray-800);
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s, transform 0.2s;
+  color: var(--gray-900);  /* Added explicit color for light mode */
 }
 
 .dark .pet-icon {
   background-color: var(--gray-700);
-  color: var(--gray-200);
+  color: var(--gray-200);  /* Explicitly set dark mode color */
 }
 
 .pet-icon:hover,
 .pet-icon.active {
   border-color: var(--primary);
+}
+
+.pet-icon:hover {
+  background-color: var(--gray-200);
+  transform: translateY(-2px);
+}
+
+.dark .pet-icon:hover {
+  background-color: var(--gray-600);
+}
+
+.pet-icon.active {
   background-color: var(--primary-light);
   color: var(--primary);
-  transform: translateY(-2px);
+}
+
+.dark .pet-icon.active {
+  background-color: var(--primary-light);
+  color: white;
+}
+
+.tone-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .tone-option {
@@ -260,19 +548,21 @@ header p {
   border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s;
-  color: var(--gray-800);
+  color: var(--gray-900);  /* Added explicit color for light mode */
 }
 
 .dark .tone-option {
   background-color: var(--gray-700);
-  color: var(--gray-200);
+  color: var(--gray-200);  /* Explicitly set dark mode color */
 }
 
-.tone-option:hover,
-.tone-option.active {
-  background-color: var(--primary-light);
-  color: var(--primary);
+.tone-option:hover {
+  background-color: var(--gray-200);
   transform: translateY(-2px);
+}
+
+.dark .tone-option:hover {
+  background-color: var(--gray-600);
 }
 
 .tone-option.active {
@@ -283,13 +573,32 @@ header p {
 .footer {
   margin-top: 3rem;
   text-align: center;
-  color: var(--gray-600);
+  color: var(--gray-700);  /* Darkened from var(--gray-500) for better visibility */
   font-size: 0.9rem;
   transition: color 0.3s;
 }
 
 .dark .footer {
-  color: var(--gray-400);
+  color: var(--gray-400);  /* Explicitly set for dark mode */
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #results,
+  #results * {
+    visibility: visible;
+  }
+  #results {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: white !important;
+    color: black !important;
+    padding: 2rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -302,3 +611,11 @@ header p {
   }
 }
 
+#resultsCard {
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+#resultsCard.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
